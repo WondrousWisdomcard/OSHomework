@@ -85,7 +85,60 @@ CPUID指令：请求处理器的特定信息并且把信息返回到特定寄存
 	
 ### 4.4 在汇编中使用C库函数 cpuid2.s
 
-在程序中，我们在bss申请了12个字节的缓冲区buffer，(.lcomm buffer 12)我们使用call指令调用C函数，通过`pushl以此押入$buffer和$output，最后还原栈。 
+在程序中，我们在bss申请了12个字节的缓冲区buffer，(.lcomm buffer 12)我们使用call指令调用C函数，通过pushl以此押入$buffer和$output，最后还原栈。 
+
+使用动态连接的方法：在程序运行时由操作系统调用动态连接库。
+
+  使用ld：(需将main改为_start)
+
+	as -gstabs+ -o cpuid2.o cpuid2.s
+	ld -lc -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cpuid2 cpuid2.o
+	./cpuid2
+
+  使用gcc：(需将_start改为main)
+
+	gcc -o cpuid2 cpuid2.s
+	./cpuid2
+
+编译报错（未解决）： ![3](./LabWeek02_3.png)
 
 
 # 问题和解决
+
+## 问题1：PUSHL指令在64位x86中不适用
+
+解决方案1：将PUSHL改为PUSHQ。
+
+解决方案2：
+
+	pushq $buffer
+	pushq $output
+	
+	改为：
+	
+	lea output(%rip), %rdi 
+	lea buffer(%rip), %rsi
+
+## 问题2：C库函数的动态链接
+
+我怀疑是因为动态连接库的名称或相对地址不对。
+
+编译报错： ![4](./LabWeek02_2.png)
+
+解决方案：对程序部分进行了修改(即采用了问题1的解决方案2)，并找到动态库 /lib64/ld-linux-x86-64.so.2
+
+![5](./LabWeek02_4.png)
+   
+参考：https://blog.csdn.net/FreeeLinux/article/details/85147455
+
+不清楚报错原因。
+
+编译报错： ![6](./LabWeek02_3.png)
+
+
+
+
+
+
+
+
