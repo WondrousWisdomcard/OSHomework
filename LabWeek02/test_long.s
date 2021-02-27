@@ -3,15 +3,16 @@
 output:
 	.asciz "The second element is '%d'\n"
 sizes:
-	.long 1
+	.int 1,2
 .section .text
-.global _start
+.globl _start
 _start:
-	movl $0, %eax
-	movl $sizes, %edi
-	lea output(%rip), %rdi 
-	lea sizes(%rip), %rsi
-	call printf 
-	pushq $0
-	call exit
 	
+	movl $1, %eax
+	movl $4, %ebx
+	int $0x80
+	
+
+#as -gstabs+ -o test_long.o test_long.s
+#ld -lc -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o test_long test_long.o
+#./test_long

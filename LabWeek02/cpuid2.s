@@ -5,7 +5,7 @@ output:
 .section .bss
 	.lcomm buffer, 12
 .section .text
-.global _start
+.globl _start
 _start:
 	movl $0, %eax
 	cpuid
