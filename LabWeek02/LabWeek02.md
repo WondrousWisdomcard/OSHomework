@@ -10,6 +10,12 @@
 
 [实验4：比较不同段申请内存的程序大小 sizetest1.s, sizetest2.s, sizetest3.s](#ex4)
 
+[实验5：mov测试-内存到寄存器传递 movtest1.s](#ex5)
+
+[实验6：mov测试-寄存器到内存传递 movtest2.s](#ex6)
+
+[实验6：mov测试-变址数据传输 movtest3.s](#ex7)
+
 # 技术日志
 
 ## 第四章
@@ -186,27 +192,62 @@ source和destination可以是**内存地址**，**储存在内存中的数据值
 	
 mov指令源和目标操作数组合：
 
-	#1. 立即数->通用寄存器,内存
+* 立即数->通用寄存器,内存
 	
 	movl $0, %eax
 	movl $0x80, %ebx
 	movl $100, height
 	#height为内存位置，每个值前加上$表明其为立即数，0x表示16进制。
 	
-	#2. 寄存器->寄存器 （通用寄存器、段寄存器、控制寄存器、调试寄存器）
+* 寄存器->寄存器 （通用寄存器、段寄存器、控制寄存器、调试寄存器）
+
+8个通用寄存器 (eax,ebx,ecx,edx,edi,esi,ebp,esp)，可以传送给可用的所有类型的寄存器。
 	
-	#8个通用寄存器 (eax,ebx,ecx,edx,edi,esi,ebp,esp)，可以传送给可用的所有类型的寄存器
-	#专用寄存器只能与通用寄存器传输内容
-	#小心处理长度不同的寄存器之间的传输
+
+专用寄存器只能与通用寄存器传输内容,小心处理长度不同的寄存器之间的传输
 	
 	movl %eax, %ecx
 
-	#3. 内存<->寄存器
-		
-	#10. 内存->通用寄存器
-	#11. 内存->段寄存器
-	#12. 通用寄存器->内存
-	#13. 段寄存器->内存
+* 内存<->寄存器
+
+**把数值从内存送到寄存器**:
+
+	#内存地址的表示： 标签
+	movl value, %eax #将value内存位置的数据值传给了eax
+	
+<span id = "ex5"></span>
+**测试**：movtest1.s 测试值从内存传递给寄存器
+
+测试结果：![6](./LabWeek02_6.png)
+	
+**把数据从寄存器传送给内存位置中**：
+
+	movl %ecx, value
+	
+<span id = "ex6"></span>
+**测试**：movtest2.s 测试值从寄存器传递给内存
+
+测试结果：![7](./LabWeek02_7.png)
+
+**使用变址的内存位置**:
+
+变址内存模式：内存位置由**基址base_address**,**偏移地址offset_address**,**数据元素的长度size**,**确定选择那个元素的变址index**确定。
+
+表达式的格式：**base_address(offset_address, index, size)**
+获取的数据值位于：**base_address + offset_address + index * size**
+
+	values: .int 10, 15, 20, 25
+	
+	movl $2, %edi
+	movl values(, %edi, 4), %eax
+	# %eax 取得 20
+	
+<span id = "ex7"></span>
+**测试**：movtest3.s 变址输出数组
+
+**修改代码后出现bug，待修改**
+
+测试结果：![7](./LabWeek02_8.png)
 
 ---
 
@@ -242,6 +283,9 @@ mov指令源和目标操作数组合：
 
 编译报错： ![6](./LabWeek02_3.png)
 
+## 问题3：程序 movtest3 异常
+
+正确运行：![8](./LabWeek02_8.png)
 
 
 
