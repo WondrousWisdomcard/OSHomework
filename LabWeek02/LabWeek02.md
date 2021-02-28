@@ -1,8 +1,14 @@
 # 实验验证
 
-实验验证内容索引
+## 实验验证内容索引
 
-[实验1：squid.s](#ex1)
+[实验1：简单的厂商ID字符串 squid.s ](#ex1)
+
+[实验2：使用gdb调试程序 squid.s ](#ex2)
+
+[实验3：在汇编中使用C库函数 squid2.s ](#ex3)
+
+[实验4：比较不同段申请内存的程序大小 sizetest1.s, sizetest2.s, sizetest3.s](#ex4)
 
 # 技术日志
 
@@ -29,9 +35,8 @@
 		_start:
 		#代码
 	
+<span id = "ex1"></span>	
 ### 4.2 简单程序 cpuid.s
-
-<span id = "ex1"></span>
 
 4. CPUID指令：请求处理器的特定信息并且把信息返回到特定寄存器中，它使用单一寄存器值作为输入。EAX寄存器用于决定CPUID指令生成什么信息，根据此在EBX，ECX，EDX上生成关于处理器的信息。
 	
@@ -50,6 +55,7 @@
 	gcc -o cpuid cpuid.s
 	./cpuid
 
+<span id = "ex2"></span>
 ### 4.3 调试程序
 
 5. 使用GNU调试器检查程序，监视处理过程中寄存器和内存位置的改变。
@@ -87,6 +93,7 @@
  
 	x/42cb &output
 	
+<span id = "ex3"></span>	
 ### 4.4 在汇编中使用C库函数 cpuid2.s
 
 6. 在程序中，我们在bss申请了12个字节的缓冲区buffer，(.lcomm buffer 12)我们使用call指令调用C函数，通过pushl以此押入$buffer和$output，最后还原栈。 
