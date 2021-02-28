@@ -11,9 +11,10 @@ _start:
 	movl $0, %ecx
 	lea output(%ecx), %rdi 
 loop:
-	movl values(, %ecx, 4), %eax
-	movl %eax, %esi 
+	mov values(, %ecx, 4), %rsi 
+	
 	call printf
+	
 	inc %ecx
 	cmpl $11, %ecx
 	jne loop
