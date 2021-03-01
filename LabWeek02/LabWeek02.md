@@ -18,6 +18,8 @@
 
 [实验8：mov测试-间接寻址模式 movtest4.s](#ex8)
 
+[实验9：cmov测试-查找values数组中的最大值 cmovtest.s](#ex9)
+
 # 技术日志
 
 ## 第四章
@@ -268,7 +270,54 @@ mov指令源和目标操作数组合：
 <span id = "ex8"></span>
 **测试**：movtest4.s 间接寻址模式寻址
 
-测试结果：![8](./LabWeek02_9.png)
+测试结果：![8](./LabWeek02_10.png)
+
+从上到下，可以看到的分别是输出values数组前四个元素，把values[0]移动到eax，把values地址赋值给edi寄存器，把values[1]改为100。
+
+测试结果：![11](./LabWeek02_11.png)
+
+程序的退出码是被存放到ebx寄存器中新创建的第二个数组元素（100）。
+
+### 5.3 条件传送指令
+
+条件传送指令的本质是mov，可以避免处理器执行JMP指令，有助于处理器的预取缓存状态，通常能够提高应用的速度。
+
+	comvx source, destination
+	#其中x是一个或者两个字母的代码，表示将触发传送操作的条件(还区分有符号数和无符号数)。条件取决与EFLAGS寄存器的当前值。
+	
+|FLAGS位|名称|
+|---|---|
+|CF|进位Carry|
+|OF|溢出Overflow|
+|PF|奇偶校验Parity|
+|SF|符号标志Sign|
+|ZF|零标志Zero|
+
+举例：
+
+	cmova/cmovnbe 无符号，大于/不小于或等于 (CF或ZF) = 0	
+	cmovge/cmovnl 有符号，大于或等于/不小于 (SF异或OF) = 0
+	
+举例：
+
+	movl value, %ecx
+	cmp %ebx, %ecx
+	cmova %ecx, %ebx
+	
+在这个例子中，value的值被赋值给ecx，cmp将这个值与ebx比较。**cmp指令从第二个操作数中减去第一个操作数并设置eflags寄存器**，**如果ecx寄存器中的值大于ebx，就使用cmova指令把ebx的值替换为ecx中的值。**	
+
+<span id = "ex9"></span>
+**测试**：cmovtest.s 使用cmov指令赋值，查找values数组中的最大值
+
+测试结果：![12](./LabWeek02_12.png)
+
+测试结果能够成功输出最大值315，但是会报一个段错误。	
+
+### 5.4 交换数据
+
+### 5.5 堆栈
+
+### 5.6 优化内存访问
 
 
 ---
@@ -301,19 +350,34 @@ mov指令源和目标操作数组合：
    
 参考：https://blog.csdn.net/FreeeLinux/article/details/85147455
 
-不清楚报错原因。
+**未解决**不清楚报错原因。
 
 编译报错： ![6](./LabWeek02_3.png)
 
 ## 问题3：程序 movtest3 异常
 
+**未解决**
+
 异常运行：![8](./LabWeek02_8.png)
 
+## 问题4： 程序 movtest4 单步调试异常
 
+异常运行：![9](./LabWeek02_9.png)
 
+已解决，考虑到64位，我使用了64位寄存器存储地址，将程序代码改为：
 
+	movl values, %eax
+	mov $values, %rdi
+	movl $100, 4(%rdi)
+	mov $1, %rdi
+	movl values(, %rdi, 4), %ebx
+	movl $1, %eax
 
+然后在单步调试不使用step，而是使用stepi，具体原因我还没有弄明白。
 
+正常运行：![10](./LabWeek02_10.png)
 
+## 问题5： 程序 cmovtest 段错误
 
+测试结果：![12](./LabWeek02_12.png)
 
