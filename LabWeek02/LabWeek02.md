@@ -22,6 +22,10 @@
 
 [实验10：bswap测试-交换字节 swaptest.s](#ex10)
 
+[实验11：cmpxchg测试-条件交换字节 cmpxchgtest.s](#ex11)
+
+[实验12：cmpxchg8b测试-条件交换字节 cmpxchgtest8b.s](#ex12)
+
 # 技术日志
 
 ## 第四章
@@ -331,6 +335,33 @@ mov指令源和目标操作数组合：
 
 测试结果：![13](./LabWeek02_13.png)
 
+**xadd**：交换两个寄存器或者内存位置和寄存器的值，把两个值相加，然后把结果储存在目标位置（可以是寄存器或者内存位置）
+
+	xadd source, destination
+	#source必须是寄存器
+	
+**cmpxchg**：比较目标操作数与EAX或AX或AL寄存器中的值，如果相等，就把**源操作数的值**赋值给**目标操作数**；如果不相等，就把**目标操作数的值**赋值给EAX或AX或AL寄存器中
+
+	cmpxchg source, destination
+
+<span id = "ex11"></span>
+**测试**：cmpxchgtest.s 
+
+测试结果：![14](./LabWeek02_14.png)
+
+可以看到，源操作数ebx = 10，不等于eax = 5，于是目标操作数data的值被改为5。
+
+**cmpxchg8b**： 与cmpxchg相似，他处理**8个字节**，单一操作数destination引用一个内存位置，其中8字节值会与edx和eax中的值比较（**edx高位，eax低位**）。**若相等，就把ecx:ebx寄存器中的64位值传给内存目标，如果不匹配，把目标内存位置值加载到edx:eax中**。
+
+
+<span id = "ex12"></span>
+**测试**：cmpxchg8btest.s 
+
+测试结果：![15](./LabWeek02_15.png)
+
+我们可以看到gdb单步调试应该使用x/8x而不是x/8b, 最后经过cmpxchg8b，我们可以观察到data变成了ecx:ebx。这里要注意数据的排列顺序，我们可以看到 edx：eax 与 data 正好相反。
+
+
 ### 5.5 堆栈
 
 ### 5.6 优化内存访问
@@ -342,9 +373,7 @@ mov指令源和目标操作数组合：
 
 ## 问题1：PUSHL指令在64位x86中不适用
 
-解决方案1：将PUSHL改为PUSHQ。
-
-解决方案2：
+解决方案：
 
 	pushq $buffer
 	pushq $output
@@ -353,6 +382,8 @@ mov指令源和目标操作数组合：
 	
 	lea output(%rip), %rdi 
 	lea buffer(%rip), %rsi
+	
+其中 rdi，rsi都是起传参数作用的寄存器，有先后顺序。
 
 ## 问题2：C库函数的动态链接
 
