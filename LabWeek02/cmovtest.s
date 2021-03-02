@@ -24,6 +24,4 @@ loop:
 	
 	int $0x80
 	
-#as -o cmovtest.o cmovtest.s
-#ld -lc -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmovtest cmovtest.o
-#./cmovtest
+
