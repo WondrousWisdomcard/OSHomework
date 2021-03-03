@@ -1,35 +1,3 @@
-# 实验验证
-
-## 实验验证内容索引
-
-[实验1：简单的厂商ID字符串 squid.s ](#ex1)
-
-[实验2：使用gdb调试程序 squid.s ](#ex2)
-
-[实验3：在汇编中使用C库函数 squid2.s ](#ex3)
-
-[实验4：比较不同段申请内存的程序大小 sizetest1.s, sizetest2.s, sizetest3.s](#ex4)
-
-[实验5：mov测试-内存到寄存器传递 movtest1.s](#ex5)
-
-[实验6：mov测试-寄存器到内存传递 movtest2.s](#ex6)
-
-[实验7：mov测试-变址数据传输 movtest3.s](#ex7)
-
-[实验8：mov测试-间接寻址模式 movtest4.s](#ex8)
-
-[实验9：cmov测试-查找values数组中的最大值 cmovtest.s](#ex9)
-
-[实验10：bswap测试-交换字节 swaptest.s](#ex10)
-
-[实验11：cmpxchg测试-条件交换字节 cmpxchgtest.s](#ex11)
-
-[实验12：cmpxchg8b测试-条件交换字节 cmpxchgtest8b.s](#ex12)
-
-[实验13：冒泡排序 bubble.s](#ex13)
-
-[实验14：push，pop测试 pushpop.s](#ex14)
-
 # 技术日志
 
 [toc]
@@ -56,8 +24,7 @@
 		.globl _start
 		_start:
 		#代码
-	
-<span id = "ex1"></span>	
+		
 ### 4.2 简单程序 cpuid.s
 
 4. CPUID指令：请求处理器的特定信息并且把信息返回到特定寄存器中，它使用单一寄存器值作为输入。EAX寄存器用于决定CPUID指令生成什么信息，根据此在EBX，ECX，EDX上生成关于处理器的信息。
@@ -114,8 +81,7 @@
  x的格式： x/nyz ，其中n是显示的字段数，y是输出格式(c字符,d十进制,x十六进制)，z是显示的字段长度(b 字节, h 16位半字节, w 32位字)
  
 	x/42cb &output
-	
-<span id = "ex3"></span>	
+		
 ### 4.4 在汇编中使用C库函数 cpuid2.s
 
 6. 在程序中，我们在bss申请了12个字节的缓冲区buffer，(.lcomm buffer 12)我们使用call指令调用C函数，通过pushl以此押入$buffer和$output，最后还原栈。 
@@ -187,12 +153,7 @@
 
 	.lcomm buffer, 1000
 	#把1000字节的内存区域赋值给buffer标签，在本地通用内存区域的程序之外不能访问它（不能在.globl命令中使用它）
-	
-**测试**：sizetest1.s , sizetest2.s 和 sizetest3.s 测试.bss段申请的空间不包含在可执行程序中
 
-测试结果：![5](./LabWeek02_5.png)
-
-我们可以看到sizetest1.s（没有申请bss段的程序）和sizetest2.s（申请了bss段的程序）大小差别不大（分别是4860和4800字节），试验结果得到**.bss段申请的空间不包含在可执行程序中**，而sizetest3.s（在数据区申请了10000字节的程序）的大小是18800字节，显然包含了数据区所申请的10000字节。
 
 ### 5.2 传送数据元素
 
@@ -231,19 +192,9 @@ mov指令源和目标操作数组合：
 	#内存地址的表示： 标签
 	movl value, %eax #将value内存位置的数据值传给了eax
 	
-<span id = "ex5"></span>
-**测试**：movtest1.s 测试值从内存传递给寄存器
-
-测试结果：![6](./LabWeek02_6.png)
-	
 #### 把数据从寄存器传送给内存位置中：
 
 	movl %ecx, value
-	
-<span id = "ex6"></span>
-**测试**：movtest2.s 测试值从寄存器传递给内存
-
-测试结果：![7](./LabWeek02_7.png)
 
 #### 使用变址的内存位置：
 
@@ -257,11 +208,6 @@ mov指令源和目标操作数组合：
 	movl $2, %edi
 	movl values(, %edi, 4), %eax
 	# %eax 取得 20
-	
-<span id = "ex7"></span>
-**测试**：movtest3.s 变址输出数组
-
-测试结果：![7](./LabWeek02_20.png)
 
 #### 使用寄存器间接寻址：
 
@@ -276,17 +222,6 @@ mov指令源和目标操作数组合：
 	#注意括号
 	
 如果没有括号，那么指令只是把ebx寄存器中的值复制给edi寄存器，如果有括号，那么指令就是**把寄存器ebx中的值传送给EDI寄存器中包含的内存位置**。
-
-<span id = "ex8"></span>
-**测试**：movtest4.s 间接寻址模式寻址
-
-测试结果：![8](./LabWeek02_10.png)
-
-从上到下，可以看到的分别是输出values数组前四个元素，把values[0]移动到eax，把values地址赋值给edi寄存器，把values[1]改为100。
-
-测试结果：![11](./LabWeek02_11.png)
-
-程序的退出码是被存放到ebx寄存器中新创建的第二个数组元素（100）。
 
 ### 5.3 条件传送指令
 
@@ -316,13 +251,6 @@ mov指令源和目标操作数组合：
 	
 在这个例子中，value的值被赋值给ecx，cmp将这个值与ebx比较。**cmp指令从第二个操作数中减去第一个操作数并设置eflags寄存器**，**如果ecx寄存器中的值大于ebx，就使用cmova指令把ebx的值替换为ecx中的值。**	
 
-<span id = "ex9"></span>
-**测试**：cmovtest.s 使用cmov指令赋值，查找values数组中的最大值
-
-测试结果：![19](./LabWeek02_19.png)
-
-测试结果能够成功输出最大值315。	
-
 ### 5.4 交换数据
 
 12. 数据交换指令
@@ -333,12 +261,6 @@ mov指令源和目标操作数组合：
 	
 **bswap**:反转寄存器中字节的顺序。第0～7位和第23～31位进行交换，第8～15位和第16～23位进行交换。这样实现了小尾数的值<->大尾数的值。
 	
-
-<span id = "ex10"></span>
-**测试**：swaptest.s 使用bswap指令交换字节
-
-测试结果：![13](./LabWeek02_13.png)
-
 **xadd**：交换两个寄存器或者内存位置和寄存器的值，把两个值相加，然后把结果储存在目标位置（可以是寄存器或者内存位置）
 
 	xadd source, destination
@@ -348,29 +270,7 @@ mov指令源和目标操作数组合：
 
 	cmpxchg source, destination
 
-<span id = "ex11"></span>
-**测试**：cmpxchgtest.s 
-
-测试结果：![14](./LabWeek02_14.png)
-
-可以看到，源操作数ebx = 10，不等于eax = 5，于是目标操作数data的值被改为5。
-
 **cmpxchg8b**： 与cmpxchg相似，他处理**8个字节**，单一操作数destination引用一个内存位置，其中8字节值会与edx和eax中的值比较（**edx高位，eax低位**）。**若相等，就把ecx:ebx寄存器中的64位值传给内存目标，如果不匹配，把目标内存位置值加载到edx:eax中**。
-
-
-<span id = "ex12"></span>
-**测试**：cmpxchg8btest.s 
-
-测试结果：![15](./LabWeek02_15.png)
-
-我们可以看到gdb单步调试应该使用x/8x而不是x/8b, 最后经过cmpxchg8b，我们可以观察到data变成了ecx:ebx。这里要注意数据的排列顺序，我们可以看到 edx：eax 与 data 正好相反。
-
-<span id = "ex13"></span>
-**测试**：bubble.s 实现冒泡排序 
-
-测试结果：![16](./LabWeek02_16.png)
-
-从试验结果我们可以看到，我们将内存中的values的10个元素从小到大进行了排序。
 
 ### 5.5 堆栈
 
@@ -381,15 +281,6 @@ mov指令源和目标操作数组合：
 	as pushpop.s -o pushpop.o --32
 	ld -m elf_i386 pushpop.o -o pushpop
 	./pushpop
-
-<span id = "ex14"></span>
-**测试**：pushpop.s 测试pop和push（32位） 
-
-在源程序代码的基础上，我增加了断点pop和stop来监视push结束后和pop结束后栈顶指针的值。我们可以看到在所有push结束后esp的值减少了18,在pop结束后esp又恢复为原值，与教材结果相同。
-
-测试结果：![17](./LabWeek02_17.png)
-
-测试结果：![18](./LabWeek02_18.png)
 
 ### 5.6 优化内存访问
 

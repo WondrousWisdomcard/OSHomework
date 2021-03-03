@@ -18,10 +18,17 @@ loop:
 	cmp $10, %edi
 	jne loop
 	
-	mov $output, %rdi 
-	movl %ebx, %esi 
+	pushl %ebx
+	pushl $output
+	#mov $output, %rdi 
+	#movl %ebx, %esi 
 	call printf
+	addl $8, %esp
 	
-	int $0x80
+	pushl $0
+	call exit
+	#int $0x80
 	
-
+# 	as --32 -o cmovtest.o cmovtest.s
+#	ld -m elf_i386 -dynamic-linker /lib/ld-linux.so.2 -o cmovtest -lc cmovtest.o
+#	./cmovtest
