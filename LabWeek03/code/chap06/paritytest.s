@@ -4,7 +4,7 @@
 _start:
    movl $1, %eax
    movl $4, %ebx
-   subl $3,  %ebx
+   subl $1, %ebx
    jp overhere
    int $0x80
 overhere:
