@@ -5,8 +5,7 @@ value1:
 value2:
    .int 1, -435, 0, -25
 .section .bss
-data:
-   .lcomm data, 16
+   .lcomm data2, 16
 .section .text
 .globl _start
 _start:
@@ -14,7 +13,7 @@ _start:
    cvtps2dq value1, %xmm0
    cvttps2dq value1, %xmm1
    cvtdq2ps value2, %xmm2
-   movdqu %xmm0, data
+   movdqu %xmm0, data2
 
    movl $1, %eax
    movl $0, %ebx

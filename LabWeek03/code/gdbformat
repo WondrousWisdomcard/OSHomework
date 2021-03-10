@@ -1,8 +1,8 @@
-as --32 -o fpuvals.o fpuvals.s
-	ld -m elf_i386 -dynamic-linker /lib/ld-linux.so.2 -o fpuvals -lc fpuvals.o
-	./fpuvals
+as --32 -o floattest.o floattest.s
+	ld -m elf_i386 -dynamic-linker /lib/ld-linux.so.2 -o floattest -lc floattest.o
+	./floattest
 	
-gdb fpuvals
+gdb floattest
 break *_start+1
 run
 
