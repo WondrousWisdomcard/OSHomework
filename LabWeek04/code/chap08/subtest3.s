@@ -6,7 +6,7 @@ output:
 .globl _start
 _start:
    movl $-1590876934, %ebx
-   movl $1259230143, %eax
+   movl $-1259230143, %eax
    subl %eax, %ebx
    jo over
    pushl %ebx

@@ -5,8 +5,8 @@ output:
 .section .text
 .globl _start
 _start:
-   movl $-1590876934, %ebx
-   movl $-1259230143, %eax
+   movl $-190876934, %ebx
+   movl $-159230143, %eax
    addl %eax, %ebx
    jo over
    pushl %ebx
