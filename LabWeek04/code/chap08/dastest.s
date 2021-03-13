@@ -15,6 +15,7 @@ _start:
 loop1:
    movb value2(, %edi, 1), %al
    sbbb value1(, %edi, 1), %al
+before:
    das
    movb %al, result(, %edi, 1)
    inc %edi

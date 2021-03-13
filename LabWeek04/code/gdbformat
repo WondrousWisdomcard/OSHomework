@@ -1,8 +1,8 @@
-as --32 -o sse2float.o sse2float.s
-	ld -m elf_i386 -dynamic-linker /lib/ld-linux.so.2 -o sse2float -lc sse2float.o
-	./sse2float
+as --32 -o saltest.o saltest.s
+	ld -m elf_i386 -dynamic-linker /lib/ld-linux.so.2 -o saltest -lc saltest.o
+	./saltest
 	
-gdb sse2float
+gdb saltest
 break *_start+1
 run
 

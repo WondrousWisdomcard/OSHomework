@@ -23,4 +23,6 @@ loop1:
    adcb $0, sum(, %edi, 4)
    movl $1, %eax
    movl $0, %ebx
+stop:
+	movl $1, %eax
    int $0x80
