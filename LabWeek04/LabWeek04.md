@@ -10,43 +10,69 @@
 
 ## 实验验证内容索引
 
-[实验1. 测试jmp - jumptest.s](#ex1)
+[实验1. add测试 - addtest1.s](#ex1)
 
-[实验2. 测试call - calltest.s](#ex2)
+[实验2. 带符号数加法测试 - addtest2.s](#ex2)
 
-[实验3. 测试cmp - cmptest.s](#ex3)
+[实验3. 测试进位加法 - addtest3.s](#ex3)
 
-[实验4. 测试奇偶校验 - paritytest.s](#ex4)
+[实验4. 测试溢出加法 - addtest4.s](#ex4)
 
-[实验5. 测试符号位 - signtest.s](#ex5)
+[实验5. 四字加法 - adctest.s](#ex5)
 
-[实验6. 测试loop - loop.s](#ex6)
+[实验6. 减法测试 - subtest1.s](#ex6)
 
-[实验7. 优化循环指令 - betterloop.s](#ex7)
+[实验7. 减法进位 - sybtest2.s](#ex7)
 
-[实验8. 带符号整数测试 - inttest.s](#ex8)
+[实验8. 减法溢出 - subtest3.s](#ex8)
 
-[实验9. 扩展无符号整数测试 - movzxtest.s](#ex9)
+[实验9. 四字减法 - sbbtest.s](#ex9)
 
-[实验10. 扩展带符号整数测试 - movsxtest.s, movsxtest2.s](#ex10)
+[实验10. 乘法测试 - multest.s](#ex10)
 
-[实验11. .quad命令测试 - quadtest.s](#ex11)
+[实验11. 乘法溢出检查 - imultest.s](#ex11)
 
-[实验12. mmx命令测试 - mmxtest.s](#ex12)
+[实验12. 乘法溢出检查 - imultest2.s](#ex12)
 
-[实验13. sse命令测试 - ssetest.s](#ex13)
+[实验13. 除法测试 - divtest.s](#ex13)
 
-[实验14. fbld命令测试 - bcdtest.s](#ex14)
+[实验14. 左移测试 - saltest.s](#ex14)
 
-[实验15. 浮点数使用测试 - floattest.s](#ex15)
+[实验15. 不打包BCD计算测试 - aaatest.s](#ex15)
 
-[实验16. 浮点数预置值使用测试 - fpuvals.s](#ex16)
+[实验16. 打包BCD计算测试 - dastest.s](#ex16)
 
-[实验17. SSE打包单精度浮点数测试 - ssefloat.s](#ex17)
+[实验17. TEST指令测试 - cpuidtest.s](#ex17)
 
-[实验18. SSE2浮点数测试 - sse2float.s实验测试](#ex18)
+[实验18. 字符串传送测试 - movstest1.s](#ex18)
 
-[实验19. 数据类型转换测试 - convtest.s实验测试](#ex19)
+[实验19. 字符串传送测试 - movstest2.s](#ex19)
+
+[实验20. 循环字符串传送测试 - movstest3.s](#ex20)
+
+[实验21. REP循环传送测试 - reptest1.s](#ex21)
+
+[实验22. REP块传送 - reptest2.s](#ex22)
+
+[实验23. 灵活REP块传送测试 - reptest3.s](#ex23)
+
+[实验24. 反向块传送测试 - reptest4.s](#ex24)
+
+[实验25. 字符串拷贝测试 - stotest1.s](#ex25)
+
+[实验26. 字符串小写转大写 - convert.s](#ex26)
+
+[实验27. 比较字符串（相等）测试 - cmpstest.s](#ex27)
+
+[实验28. 比较字符串测试 - cmpstest2.s](#ex28)
+
+[实验29. 比较字符串（大小）测试 - cmpstest3.s](#ex29)
+
+[实验30. 搜索指定字符测试 - scastest1.s](#ex30)
+
+[实验31. 搜索指定字符串（误导向）测试 - scastest2.s](#ex31)
+
+[实验32. 计算字符串长度测试 - strtest.s](#ex32)
 
 # 技术日志
 
@@ -269,7 +295,7 @@ aaa测试 - aaatest.s实验测试：不打包BCD运算
 
 <span id = "ex16"></span>
 
-aaa测试 - dastest.s实验测试：打包BCD运算
+das测试 - dastest.s实验测试：打包BCD运算
 
 实验截图： ![1](./screenshot/LabWeek04_18.png)
 
@@ -326,12 +352,164 @@ ESI和EDI寄存器都指向了相应内存位置的尾部，使用STD命令让�
 
 <span id = "ex20"></span>
 
-movs测试 - movstest2.s实验测试：字符串传送
+movs测试 - movstest3.s实验测试：循环字符串传送
 
 实验截图： ![1](./screenshot/LabWeek04_22.png)
 
 在整个动态过程是一个循环中，字符串是从后面开始一个一个字节传输的。
 
+2. REP**前缀**：用于按照特定次数重复执行字符串指令，由ECX寄存器内部控制（循环直至ecx寄存器为0）。
+
+	* 逐字节传送字符串：MOVB与REP一起使用
+
+		rep movsb
+
+	<span id = "ex21"></span>
+
+	rep测试 - reptest1.s实验测试：rep循环传送
+
+	实验截图： ![1](./screenshot/LabWeek04_23.png)
+
+	可以看到rep行自动执行了23次，每次传送一字节数据。
+
+	* 逐块地传送字符串：通过使用movsw，movsl，一次传送多字节，其中ecx应包含循环次数（随movs助记符的不同而不同）
+	
+	<span id = "ex22"></span>
+
+	rep测试 - reptest2.s实验测试：rep块传送
+
+	实验截图： ![1](./screenshot/LabWeek04_24.png)
+
+	我们需要先把循环次数传入ecx寄存器，在程序中我们每次传送四个字节，传送共六次，但需要注意可能会传入错误数据（在数据不能被四字节整除的情况下。）
+	
+	* 传送大型字符串：尽可能多地使用movsl，显然效率更高
+
+	<span id = "ex23"></span>
+
+	rep测试 - reptest3.s实验测试：灵活的rep块传送
+
+	实验截图： ![1](./screenshot/LabWeek04_25.png)
+	
+	可以看到在传输最后两个字符时用的不是movsl而是movsb，来将整个字符串传输到了目的内存，避免了出现如同reptest2.s实验的错误结果。
+	
+	* 按照相反的方向传送字符串：设置df标志即可。
+
+	<span id = "ex24"></span>
+	
+	rep测试 - reptest4.s实验测试：反向块传送
+
+	实验截图： ![1](./screenshot/LabWeek04_26.png)
+	
+	我们通过实验验证也发现反向传送字符串时，在执行完所有循环之前无法通过gdb看到output的数据，虽然在内存中是实际一步步完成传送的。
+
+	* 其他rep指令：repe 等于时重复，repne 不等时重复，repnz 等于时0重复， repz 为0时重复。
+	
+### 10.2 储存和加载字符串
+
+1. LODS指令：**用于把内存中的字符串传送到EAX寄存器中，以ESI寄存器作为隐藏参数，包含字符串所在地址，数据加载完成后，LODS按照DF寄存器递增或者递减，**三种格式：
+
+	lodsb # 把一个字节加载到AL寄存器
+	lodsw # 把两个字节加载到AX寄存器
+	lodsl # 把四个字节加载到EAX寄存器
+	
+2. STOS指令：把存在EAX寄存器中的字符串值存放到另一个内存位置，格式和LODS类似，有STOSB，STOSW，STOSL，STOS可以与REP指令一同使用。
+
+<span id = "ex24"></span>
+
+stos测试 - stotest1.s实验测试：把0x20拷贝到256字节的缓冲区
+
+实验截图： ![1](./screenshot/LabWeek04_27.png)
+
+<span id = "ex24"></span>
+
+字符串函数 - convert.s实验测试：字符串小写转大写
+
+实验截图： ![1](./screenshot/LabWeek04_28.png)
+
+### 10.3 比较字符串
+
+1. CMPS指令：用于比较字符串，有CMPSB，CMPSW，CMPSL。隐含的源和目标操作数在ESI，EDI，寄存器增减方式取决与DF寄存器。**CMPS指令从源字符串中减去目标字符串，并是当地设置EFLAGS寄存器的进位、符号等**，对于不同结果我们再利用一般的条件分支来实现。
+
+<span id = "ex25"></span>
+
+stos测试 - stotest1.s实验测试：把0x20拷贝到256字节的缓冲区
+
+实验截图： ![1](./screenshot/LabWeek04_27.png)
+
+<span id = "ex26"></span>
+
+字符串函数 - convert.s实验测试：字符串小写转大写
+
+实验截图： ![1](./screenshot/LabWeek04_28.png)
+
+### 10.3 比较字符串
+
+1. CMPS指令：用于比较字符串，有CMPSB，CMPSW，CMPSL。隐含的源和目标操作数在ESI，EDI，寄存器增减方式取决与DF寄存器。**CMPS指令从源字符串中减去目标字符串，并是当地设置EFLAGS寄存器的进位、符号等**，对于不同结果我们再利用一般的条件分支来实现。
+
+<span id = "ex27"></span>
+
+cmps测试 - cmpstest.s实验测试：比较字符串
+
+实验截图： ![1](./screenshot/LabWeek04_29.png)
+
+由于字符串二者内容相等，由程序结果返回0。
+
+2.CMPS与REP一起使用：多次比较，但REP不在两个重复的过程之间检查标志的状态，而我们可以使用repe等来满足需求，满足条件后REP就会停止重复。
+
+<span id = "ex28"></span>
+
+cmps测试 - cmpstest2.s实验测试：比较字符串
+
+实验截图： ![1](./screenshot/LabWeek04_30.png)
+
+由于两行字符串的内容是不一致的（instruction和Instruction），导致repe会提前终止并不进入equal分支，最终输出11，当前ecx的值。
+
+3. 字符串不等：根据字典序进行比较。
+
+<span id = "ex29"></span>
+
+cmps测试 - strcomp.s实验测试：比较字符串大小
+
+实验截图： ![1](./screenshot/LabWeek04_31.png)
+
+在程序中，现将长度值的较小值传入ECX寄存器，如果两个字符串在一直相同，还需要比较二者的长度，由结果可以看到string1("test")小于string2("test1")。
+
+### 10.4 扫描字符串
+
+1. SCAS指令：用于扫描字符串搜索一个或者多个字符，SCASB、SCASW、SCASL。使用EDI为隐含的目标操作数，包含带扫描的字符串地址。比较时EDI改动标志寄存器。**配合REPE、REPNE使用，前者查找不匹配搜索的字符，后者查找匹配的字符**
+
+对于使用REPNE指令，当找到字符时停止扫描，此时EDI寄存器包含紧跟在定位到字符后面的内存地址。ECX包含搜索字符距离字符串末尾的距离，为了得到字符串开头的位置，要从这个值减去字符串长度并反转符号。
+
+
+<span id = "ex30"></span>
+
+scas测试 - scastest1.s实验测试：搜索指定字符
+
+实验截图： ![1](./screenshot/LabWeek04_32.png)
+
+程序思路：**把要搜索的字符串存在AL寄存器中，然后把其长度存放到ECX寄存器中,使用REPNE SCASB扫描字符串。**根据试验结果，我们在字符串的第16个位置找到了'-'。
+
+2. 搜索多个字符
+
+<span id = "ex31"></span>
+
+scas测试 - scastest2.s实验测试：搜索指定字符串（误导向）
+
+实验截图： ![1](./screenshot/LabWeek04_33.png)
+
+实验程序尝试在字符串中寻找字符序列'test'。先将'test'整个字符串存入到EAX寄存器中，然后使用SCASL一次检查是四个字节。ECX寄存器没有设置字符串的长度，而是设置为REPNE遍历整个字符串所需迭代次数。但此种方法是有错误的，因为每次检查的都是固定4字节区间，无法鉴定跨字节的情况。
+
+3. 计算字符串的长度：SCAS指令可以确定零结尾的字符串的长度。
+
+
+<span id = "ex32"></span>
+
+scas测试 - strtest.s实验测试：计算字符串长度
+
+实验截图： ![1](./screenshot/LabWeek04_34.png)
+
+程序的本质就是一直查找ascii的0,找到后即可通过当前ecx寄存器的值得到字符串长度。
+
 # 问题和解决
 
-## 问题1：
+无
