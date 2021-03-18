@@ -1,4 +1,4 @@
-# Lab Week03 - 验证实验 Blum’s Book: Sample programs in Chapter 06, 07 
+# Lab Week04 - 验证实验 Blum’s Book: Sample programs in Chapter 08, 10 
 
 **郑有为 19335286**
 
